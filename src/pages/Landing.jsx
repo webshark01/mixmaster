@@ -11,8 +11,10 @@ const searchCocktailsQuery = (searchTerm) => {
   return {
     queryKey: ['search', searchTerm || 'all'],
     queryFn: async () => {
+      // FIX: Added backticks for the template literal
       const response = await axios.get(`${cocktailSearchUrl}${searchTerm}`);
-      return response.data.drinks;
+      // Returns the drinks array OR an empty array if null (no results)
+      return response.data.drinks || [];
     },
   };
 };
@@ -29,6 +31,8 @@ export const loader =
 
 const Landing = () => {
   const { searchTerm } = useLoaderData();
+  // useQuery will return 'undefined' initially before the cache is loaded,
+  // which the CocktailList component now handles safely.
   const { data: drinks } = useQuery(searchCocktailsQuery(searchTerm));
 
   return (

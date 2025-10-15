@@ -1,12 +1,17 @@
 import Wrapper from '../assets/wrappers/CocktailList';
 import CocktailCard from './CocktailCard';
+
 const CocktailList = ({ drinks }) => {
-  if (!drinks) {
+  // Ensure drinks is always an array
+  const drinksArray = Array.isArray(drinks) ? drinks : [];
+
+  if (drinksArray.length === 0) {
     return (
       <h4 style={{ textAlign: 'center' }}>No matching cocktails found...</h4>
     );
   }
-  const formattedDrinks = drinks.map((item) => {
+
+  const formattedDrinks = drinksArray.map((item) => {
     const { idDrink, strDrink, strDrinkThumb, strAlcoholic, strGlass } = item;
     return {
       id: idDrink,
@@ -16,11 +21,12 @@ const CocktailList = ({ drinks }) => {
       glass: strGlass,
     };
   });
+
   return (
     <Wrapper>
-      {formattedDrinks.map((item) => {
-        return <CocktailCard key={item.id} {...item} />;
-      })}
+      {formattedDrinks.map((item) => (
+        <CocktailCard key={item.id} {...item} />
+      ))}
     </Wrapper>
   );
 };
